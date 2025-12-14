@@ -36,18 +36,24 @@ const manifest = {
     }
   ],
   framework: {
-    name: 'next.js',
+    name: 'Next.js',
     version: '16.0.7'
   }
 };
 
-const outputDir = path.join(__dirname, '..', 'web', '.next', 'standalone', '.amplify-hosting');
-const outputPath = path.join(outputDir, 'deploy-manifest.json');
+// Generate manifest in both locations for compatibility
+const baseDir = path.join(__dirname, '..', 'web', '.next', 'standalone');
+const amplifyHostingDir = path.join(baseDir, '.amplify-hosting');
 
-// Create directory if it doesn't exist
-fs.mkdirSync(outputDir, { recursive: true });
+// Create directories if they don't exist
+fs.mkdirSync(amplifyHostingDir, { recursive: true });
 
-// Write manifest file
-fs.writeFileSync(outputPath, JSON.stringify(manifest, null, 2));
+// Write manifest in .amplify-hosting directory (preferred location)
+const amplifyHostingPath = path.join(amplifyHostingDir, 'deploy-manifest.json');
+fs.writeFileSync(amplifyHostingPath, JSON.stringify(manifest, null, 2));
+console.log('✅ Deploy manifest generated:', amplifyHostingPath);
 
-console.log('✅ Deploy manifest generated:', outputPath);
+// Also write at root of baseDirectory as fallback (Amplify checks both locations)
+const rootPath = path.join(baseDir, 'deploy-manifest.json');
+fs.writeFileSync(rootPath, JSON.stringify(manifest, null, 2));
+console.log('✅ Deploy manifest generated (fallback):', rootPath);

@@ -31,4 +31,5 @@ frontend:
       - packages/shared/node_modules/**/*
   settings:
     nodeVersion: "20"
+    # For monorepo setups, set AMPLIFY_MONOREPO_APP_ROOT=web in Amplify Console environment variables
 
