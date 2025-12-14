@@ -8,7 +8,7 @@ frontend:
       commands:
         - npm run build:web
   artifacts:
-    baseDirectory: web/.next
+    baseDirectory: web
     files:
       - '**/*'
   cache:
