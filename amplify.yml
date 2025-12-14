@@ -6,10 +6,9 @@ frontend:
         - npm ci
     build:
       commands:
-        - cd web
-        - npm run build
+        - npm run build:web
   artifacts:
-    baseDirectory: web
+    baseDirectory: web/.next
     files:
       - '**/*'
   cache:
