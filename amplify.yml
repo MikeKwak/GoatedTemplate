@@ -3,15 +3,24 @@ frontend:
   phases:
     preBuild:
       commands:
+        # Explicitly use Node 20 (required as Amplify ended support for Node 14/16/18)
+        - nvm install 20
+        - nvm use 20
+        - node -v
+        - echo "Node version: $(node --version)"
+        - echo "NPM version: $(npm --version)"
+        # Install dependencies
         - npm ci
         - npm run build --workspace=packages/shared
     build:
       commands:
+        # Build Next.js application
         - npm run build:web
+        # Create deploy-manifest.json in the .amplify-hosting directory for Amplify Hosting
+        # Next.js standalone output is in .next/standalone
         - |
-          # Create deploy-manifest.json in the .amplify-hosting directory for Amplify Hosting
-          mkdir -p web/.next/.amplify-hosting
-          cat > web/.next/.amplify-hosting/deploy-manifest.json << 'EOF'
+          mkdir -p web/.next/standalone/.amplify-hosting
+          cat > web/.next/standalone/.amplify-hosting/deploy-manifest.json << 'EOF'
           {
             "version": 1,
             "routes": [
@@ -51,7 +60,7 @@ frontend:
           }
           EOF
   artifacts:
-    baseDirectory: web/.next
+    baseDirectory: web/.next/standalone
     files:
       - '**/*'
   cache:
@@ -59,4 +68,7 @@ frontend:
       - web/node_modules/**/*
       - web/.next/cache/**/*
       - node_modules/**/*
+      - packages/shared/node_modules/**/*
+  settings:
+    nodeVersion: "20"
 
