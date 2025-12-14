@@ -8,6 +8,25 @@ frontend:
     build:
       commands:
         - npm run build:web
+        - |
+          # Create deploy-manifest.json in the build output directory for Amplify Hosting
+          mkdir -p web/.next
+          cat > web/.next/deploy-manifest.json << 'EOF'
+          {
+            "version": 1,
+            "framework": "nextjs",
+            "baseDirectory": ".next",
+            "routes": [
+              {
+                "path": "/*",
+                "target": {
+                  "kind": "rewrite",
+                  "source": "/*"
+                }
+              }
+            ]
+          }
+          EOF
   artifacts:
     baseDirectory: web/.next
     files:

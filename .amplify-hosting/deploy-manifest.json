@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "framework": "nextjs",
+  "baseDirectory": ".next",
+  "routes": [
+    {
+      "path": "/*",
+      "target": {
+        "kind": "rewrite",
+        "source": "/*"
+      }
+    }
+  ]
+}
