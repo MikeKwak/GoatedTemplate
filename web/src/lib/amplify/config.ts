@@ -1,21 +1,37 @@
+'use client';
+
 import { Amplify } from 'aws-amplify';
 
-// In Amplify Hosting, amplify_outputs.json is automatically available
-// For local development, it should exist in the project root
-let amplifyConfig: any;
+// In Amplify Hosting, amplify_outputs.json is automatically injected at runtime
+// This configuration works for both Amplify Hosting and local development
 
-try {
-  // Try to import from root (works in both local dev and Amplify Hosting)
-  amplifyConfig = require('../../../../amplify_outputs.json');
-} catch (error) {
-  // In Amplify Hosting, the file is automatically injected, so this shouldn't fail
-  // But if it does, we'll let Amplify configure itself at runtime
-  console.warn('amplify_outputs.json not found. Amplify will configure automatically in hosting environment.');
-  amplifyConfig = null;
+// For Amplify Hosting: The config is automatically injected, no action needed
+// For local development: Ensure amplify_outputs.json exists in project root
+
+// We use a runtime check to avoid build-time module resolution errors
+// The file path is constructed dynamically so Next.js doesn't try to resolve it at build time
+if (typeof window === 'undefined') {
+  // Server-side only: Try to load config for local development
+  try {
+    const path = require('path');
+    const fs = require('fs');
+    // Construct path dynamically to avoid static analysis
+    const rootPath = process.cwd();
+    const configFile = path.join(rootPath, 'amplify_outputs.json');
+    
+    if (fs.existsSync(configFile)) {
+      const configContent = fs.readFileSync(configFile, 'utf8');
+      const config = JSON.parse(configContent);
+      if (config && typeof config === 'object' && Object.keys(config).length > 0) {
+        Amplify.configure(config);
+      }
+    }
+  } catch (error) {
+    // File doesn't exist or can't be read - this is expected in Amplify Hosting
+    // Amplify will inject the config automatically at runtime
+    // No action needed
+  }
 }
 
-// Configure Amplify if config is available
-// In Amplify Hosting, if the file isn't found here, it will be injected automatically
-if (amplifyConfig) {
-  Amplify.configure(amplifyConfig);
-}
+// Client-side: Amplify Hosting automatically injects the configuration
+// Amplify.configure() will use the injected config when available

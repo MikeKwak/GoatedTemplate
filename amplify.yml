@@ -4,6 +4,7 @@ frontend:
     preBuild:
       commands:
         - npm ci
+        - npm run build --workspace=packages/shared
     build:
       commands:
         - npm run build:web

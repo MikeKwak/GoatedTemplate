@@ -10,6 +10,7 @@
     "clean": "rm -rf .next node_modules"
   },
   "dependencies": {
+    "@ai-saas/shared": "*",
     "@aws-amplify/ui-react": "^6.0.0",
     "@aws-sdk/client-lambda": "^3.0.0",
     "aws-amplify": "^6.0.0",
