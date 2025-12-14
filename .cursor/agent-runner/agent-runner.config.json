@@ -1,0 +1,11 @@
+{
+  "ticketsFile": "../../tickets.csv",
+  "fallbackTicketsFile": "../../config/tickets.csv",
+  "cursorRulesPath": "../rules",
+  "scriptsPath": "../scripts",
+  "pollInterval": 5000,
+  "maxConcurrentChats": 3,
+  "chatCooldown": 3600000,
+  "workspace": "../.."
+}
+

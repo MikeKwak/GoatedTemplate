@@ -1,0 +1,25 @@
+id,status,title,assignee,dependencies,agent_type
+TICKET-001,completed,Setup Database Models and Schema,SWE Agent,,swe
+TICKET-002,completed,Setup Alembic Database Migrations,SWE Agent,TICKET-001,swe
+TICKET-003,completed,Create Environment Configuration Files,SWE Agent,TICKET-001,swe
+TICKET-004,completed,Implement User Registration API Endpoint,SWE Agent,"TICKET-001,TICKET-002",swe
+TICKET-005,completed,Implement User Login API Endpoint,feature,"TICKET-001,TICKET-002,TICKET-004",swe
+TICKET-006,completed,Implement JWT Authentication Middleware,SWE Agent,"TICKET-004,TICKET-005",swe
+TICKET-008,todo,Implement PUT /api/users/me Endpoint, update database,SWE Agent,2024-01-15T10:00:00Z
+TICKET-009,completed,Implement GET /api/users Endpoint,feature,"TICKET-001,TICKET-002,TICKET-006",swe
+TICKET-010,todo,Create Authentication UI Components,high,auth,
+TICKET-011,todo,Create Authentication Pages and Routes,SWE Agent,"TICKET-006,TICKET-010",swe
+TICKET-012,todo,Create User Profile Page,high,"TICKET-007,TICKET-008",
+TICKET-013,completed,Create Users List/Admin Page,SWE Agent,TICKET-009,swe
+TICKET-014,completed,Create Mobile Authentication Screens,SWE Agent,"TICKET-004,TICKET-005",swe
+TICKET-015,todo,Create Mobile Profile Screen,SWE Agent,"TICKET-007,TICKET-008",swe
+TICKET-016,todo,Setup Backend Unit Tests,medium,"TICKET-004,TICKET-005,TICKET-007,TICKET-008",
+TICKET-017,todo,Setup Frontend Unit Tests,medium,"TICKET-010,TICKET-011,TICKET-012",
+TICKET-018,todo,Create API Integration Tests,SWE Agent,"TICKET-004,TICKET-005,TICKET-007,TICKET-008,TICKET-016",swe
+TICKET-019,todo,Add Input Validation Schemas,medium,"TICKET-004,TICKET-005,TICKET-007,TICKET-008",
+TICKET-020,,Implement Error Logging and Monitoring,SWE Agent,TICKET-004,swe
+TICKET-021,todo,Create API Documentation,low,"TICKET-004,TICKET-005,TICKET-007,TICKET-008,TICKET-009",
+TICKET-022,todo,Update Root README with Current State, and architecture. Include information about authentication,"TICKET-004,TICKET-005,TICKET-010,TICKET-011",Keep it concise. Detailed docs can live in separate files.
+TICKET-023,todo,Setup CI/CD Pipeline, deploy on merge to main. Include status badges in README.,"TICKET-016,TICKET-017",2024-01-15T10:00:00Z
+TICKET-024,completed,Add Password Reset Functionality,SWE Agent,"TICKET-004,TICKET-005",swe
+TICKET-025,completed,Implement Token Refresh Endpoint,SWE Agent,"TICKET-005,TICKET-006",swe
