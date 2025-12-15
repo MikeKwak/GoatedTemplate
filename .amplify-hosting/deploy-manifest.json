@@ -42,7 +42,7 @@
     "dangerouslyAllowSVG": false
   },
   "framework": {
-    "name": "Next.js",
+    "name": "nextjs",
     "version": "16.0.7"
   }
 }
