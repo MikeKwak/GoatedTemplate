@@ -16,6 +16,19 @@ frontend:
       commands:
         # Build Next.js application
         - npm run build:web
+        # Copy static files to standalone output (required for Amplify Hosting)
+        # Next.js standalone output doesn't include .next/static and public by default
+        - |
+          cd web
+          if [ -d ".next/static" ]; then
+            echo "Copying .next/static to standalone output..."
+            mkdir -p .next/standalone/.next
+            cp -r .next/static .next/standalone/.next/static
+          fi
+          if [ -d "public" ]; then
+            echo "Copying public directory to standalone output..."
+            cp -r public .next/standalone/public
+          fi
         # Create deploy-manifest.json in the .amplify-hosting directory for Amplify Hosting
         # Next.js standalone output is in .next/standalone
         - node scripts/generate-deploy-manifest.js
