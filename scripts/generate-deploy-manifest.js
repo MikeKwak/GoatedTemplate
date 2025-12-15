@@ -35,6 +35,17 @@ const manifest = {
       runtime: 'nodejs20.x'
     }
   ],
+  imageSettings: {
+    sizes: [
+      16, 32, 48, 64, 96, 128, 256, 384,
+      640, 750, 828, 1080, 1200, 1920, 2048, 3840
+    ],
+    domains: [],
+    remotePatterns: [],
+    formats: ['image/avif', 'image/webp', 'image/png', 'image/jpeg'],
+    minimumCacheTTL: 14400,
+    dangerouslyAllowSVG: false
+  },
   framework: {
     name: 'Next.js',
     version: '16.0.7'

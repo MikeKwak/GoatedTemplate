@@ -38,7 +38,7 @@
     "domains": [],
     "remotePatterns": [],
     "formats": ["image/avif", "image/webp", "image/png", "image/jpeg"],
-    "minumumCacheTTL": 14400,
+    "minimumCacheTTL": 14400,
     "dangerouslyAllowSVG": false
   },
   "framework": {
