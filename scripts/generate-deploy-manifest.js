@@ -3,31 +3,53 @@
 const fs = require('fs');
 const path = require('path');
 
+// Read Next.js version from package.json
+const webPackageJsonPath = path.join(__dirname, '..', 'web', 'package.json');
+const webPackageJson = JSON.parse(fs.readFileSync(webPackageJsonPath, 'utf8'));
+const nextVersion = webPackageJson.dependencies.next.replace(/[\^~]/, '');
+
+// Check if static directory exists in standalone output
+const baseDir = path.join(__dirname, '..', 'web', '.next', 'standalone');
+const staticDir = path.join(baseDir, '.next', 'static');
+const staticDirExists = fs.existsSync(staticDir) && fs.statSync(staticDir).isDirectory();
+
+// Build routes array conditionally
+const routes = [
+  {
+    path: '/_next/image',
+    target: {
+      kind: 'ImageOptimization',
+      cacheControl: 'public, max-age=3600, immutable'
+    }
+  }
+];
+
+// Only add static route if the static directory exists
+if (staticDirExists) {
+  console.log('✅ Static directory found, adding static route to manifest');
+  routes.push({
+    path: '/_next/static/*',
+    target: {
+      cacheControl: 'public, max-age=31536000, immutable',
+      kind: 'Static'
+    }
+  });
+} else {
+  console.log('⚠️  Static directory not found, omitting static route from manifest');
+  console.log('   Expected path:', staticDir);
+}
+
+routes.push({
+  path: '/*',
+  target: {
+    kind: 'Compute',
+    src: 'default'
+  }
+});
+
 const manifest = {
   version: 1,
-  routes: [
-    {
-      path: '/_next/image',
-      target: {
-        kind: 'ImageOptimization',
-        cacheControl: 'public, max-age=3600, immutable'
-      }
-    },
-    {
-      path: '/_next/static/*',
-      target: {
-        cacheControl: 'public, max-age=31536000, immutable',
-        kind: 'Static'
-      }
-    },
-    {
-      path: '/*',
-      target: {
-        kind: 'Compute',
-        src: 'default'
-      }
-    }
-  ],
+  routes,
   computeResources: [
     {
       name: 'default',
@@ -47,13 +69,12 @@ const manifest = {
     dangerouslyAllowSVG: false
   },
   framework: {
-    name: 'Next.js',
-    version: '16.0.7'
+    name: 'nextjs',
+    version: nextVersion
   }
 };
 
 // Generate manifest in both locations for compatibility
-const baseDir = path.join(__dirname, '..', 'web', '.next', 'standalone');
 const amplifyHostingDir = path.join(baseDir, '.amplify-hosting');
 
 // Create directories if they don't exist

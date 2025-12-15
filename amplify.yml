@@ -24,10 +24,17 @@ frontend:
             echo "Copying .next/static to standalone output..."
             mkdir -p .next/standalone/.next
             cp -r .next/static .next/standalone/.next/static
+            echo "✅ Static files copied successfully"
+            ls -la .next/standalone/.next/static || echo "⚠️  Warning: Static directory verification failed"
+          else
+            echo "⚠️  Warning: .next/static directory not found - static assets may not be available"
           fi
           if [ -d "public" ]; then
             echo "Copying public directory to standalone output..."
             cp -r public .next/standalone/public
+            echo "✅ Public directory copied successfully"
+          else
+            echo "ℹ️  No public directory found (this is okay if you don't have static assets)"
           fi
           cd ..
         # Create deploy-manifest.json in the .amplify-hosting directory for Amplify Hosting
