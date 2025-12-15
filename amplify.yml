@@ -29,6 +29,7 @@ frontend:
             echo "Copying public directory to standalone output..."
             cp -r public .next/standalone/public
           fi
+          cd ..
         # Create deploy-manifest.json in the .amplify-hosting directory for Amplify Hosting
         # Next.js standalone output is in .next/standalone
         - node scripts/generate-deploy-manifest.js
