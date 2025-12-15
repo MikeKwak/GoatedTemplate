@@ -53,4 +53,5 @@ amplify_outputs.json
 **/amplify_outputs.json
 amplify/
 .amplify/
+.amplify-hosting/
 

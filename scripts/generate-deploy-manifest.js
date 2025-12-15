@@ -8,12 +8,11 @@ const webPackageJsonPath = path.join(__dirname, '..', 'web', 'package.json');
 const webPackageJson = JSON.parse(fs.readFileSync(webPackageJsonPath, 'utf8'));
 const nextVersion = webPackageJson.dependencies.next.replace(/[\^~]/, '');
 
-// Check if static directory exists in standalone output
 const baseDir = path.join(__dirname, '..', 'web', '.next', 'standalone');
-const staticDir = path.join(baseDir, '.next', 'static');
-const staticDirExists = fs.existsSync(staticDir) && fs.statSync(staticDir).isDirectory();
 
-// Build routes array conditionally
+// For Next.js standalone mode, static files should be served by the compute function
+// The Next.js server knows how to serve files from .next/static/
+// Using kind: 'Static' causes path resolution issues with Amplify
 const routes = [
   {
     path: '/_next/image',
@@ -21,31 +20,24 @@ const routes = [
       kind: 'ImageOptimization',
       cacheControl: 'public, max-age=3600, immutable'
     }
-  }
-];
-
-// Only add static route if the static directory exists
-if (staticDirExists) {
-  console.log('✅ Static directory found, adding static route to manifest');
-  routes.push({
+  },
+  {
+    // Route static assets through compute function with caching headers
+    // This avoids the path resolution issue with kind: 'Static'
     path: '/_next/static/*',
     target: {
-      cacheControl: 'public, max-age=31536000, immutable',
-      kind: 'Static'
+      kind: 'Compute',
+      src: 'default'
     }
-  });
-} else {
-  console.log('⚠️  Static directory not found, omitting static route from manifest');
-  console.log('   Expected path:', staticDir);
-}
-
-routes.push({
-  path: '/*',
-  target: {
-    kind: 'Compute',
-    src: 'default'
+  },
+  {
+    path: '/*',
+    target: {
+      kind: 'Compute',
+      src: 'default'
+    }
   }
-});
+];
 
 const manifest = {
   version: 1,
